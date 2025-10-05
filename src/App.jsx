@@ -1,6 +1,25 @@
 import "./App.css";
+import { useState } from "react";
+import { getDatabase, ref, set } from "firebase/database";
 
 function App() {
+  let [task, setTask] = useState("");
+  let [emptyInput, setEmptyInput] = useState("");
+  const db = getDatabase();
+  let handleInput = (e) => {
+    setTask(e.target.value);
+  };
+  let handleTaskClick = () => {
+    if (!task) {
+      setEmptyInput("Task is Empty");
+    } else {
+      set(ref(db, "todoTask/"), {
+        taskName: task,
+        
+      });
+    }
+  };
+
   return (
     <>
       <div className="bg-amber-50 py-[60px] min-h-screen">
@@ -8,13 +27,20 @@ function App() {
           <div className="w-full sm:w-[90%] md:w-[700px] rounded-3xl mx-auto">
             <input
               type="text"
+              onChange={handleInput}
               placeholder="Enter a Task"
               className="py-[12px] px-5 w-full outline-0 rounded-3xl border-2 border-amber-500 text-amber-700 text-sm sm:text-base"
             />
+            {emptyInput && (
+              <div className="text-red-600 pl-5 pt-1">{emptyInput}</div>
+            )}
 
-            <div className="mt-4 text-center">
-              <button className="px-6 sm:px-8 bg-amber-400 text-white py-2 rounded-2xl font-medium hover:bg-amber-500 transition">
-                Add
+            <div className="mt-5 text-center">
+              <button
+                className="px-6 sm:px-8 bg-amber-400 text-white py-2 rounded-2xl font-medium hover:bg-amber-500 transition"
+                onClick={handleTaskClick}
+              >
+                Add Task
               </button>
             </div>
           </div>
@@ -25,7 +51,7 @@ function App() {
                 <thead>
                   <tr className="bg-sky-300 text-white">
                     <th className="py-3 px-4 sm:px-6 font-semibold text-sm sm:text-base">
-                      Name
+                      Task
                     </th>
                     <th className="py-3 px-4 sm:px-6 font-semibold text-center text-sm sm:text-base">
                       Actions
