@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState,useEffect } from "react";
-import { getDatabase, ref, set,push,onValue  } from "firebase/database";
+import { getDatabase, ref, set,push,onValue,remove  } from "firebase/database";
 
 function App() {
   let [task, setTask] = useState("");
@@ -45,6 +45,19 @@ function App() {
   },[]);
   // read data end
  
+  // delete data start
+let handleDelete =(id)=>{
+  remove(ref(db, "todoTask/" +id))
+
+}
+  // delete data End
+
+  // all delete start
+  let handleDeleteAll =()=>{
+  remove(ref(db, "todoTask/"))
+
+}
+  // all delete end
 
   return (
     <>
@@ -95,7 +108,7 @@ function App() {
                       <button className="bg-green-400 text-white font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:bg-green-500 transition text-sm sm:text-base">
                         Edit
                       </button>
-                      <button className="bg-red-500 text-white font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:bg-red-600 transition text-sm sm:text-base">
+                      <button className="bg-red-500 text-white font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:bg-red-600 transition text-sm sm:text-base" onClick={()=>{handleDelete(item.id)}}>
                         Delete
                       </button>
                     </td>
@@ -103,6 +116,9 @@ function App() {
                  ))}
                 </tbody>
               </table>
+              <button className="w-full bg-red-500 text-white font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:bg-red-600 transition text-sm sm:text-base" onClick={handleDeleteAll}>
+                        All Delete
+                      </button>
             </div>
           </div>
         </div>
