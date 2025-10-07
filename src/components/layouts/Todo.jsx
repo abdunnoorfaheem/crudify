@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState,useEffect } from "react";
 import { getDatabase, ref, set,push,onValue,remove  } from "firebase/database";
+import { Link } from 'react-router-dom';
 
 const Todo = () => {
      let [task, setTask] = useState("");
@@ -104,9 +105,10 @@ const Todo = () => {
                             {item.taskName}
                           </td>
                           <td className="py-3 px-4 sm:px-6 flex justify-center gap-2 sm:gap-3">
+                           <Link to={"/edit"}>
                             <button className="bg-green-400 text-white font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:bg-green-500 transition text-sm sm:text-base">
                               Edit
-                            </button>
+                            </button></Link>
                             <button className="bg-red-500 text-white font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:bg-red-600 transition text-sm sm:text-base" onClick={()=>{handleDelete(item.id)}}>
                               Delete
                             </button>
