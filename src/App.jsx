@@ -1,11 +1,13 @@
 import "./App.css";
-import { useState } from "react";
-import { getDatabase, ref, set } from "firebase/database";
+import { useState,useEffect } from "react";
+import { getDatabase, ref, set,push,onValue  } from "firebase/database";
 
 function App() {
   let [task, setTask] = useState("");
   let [emptyInput, setEmptyInput] = useState("");
+  let [taskView,setTaskView]=useState([]);
   const db = getDatabase();
+  //data write start
   let handleInput = (e) => {
     setTask(e.target.value);
   };
@@ -13,12 +15,36 @@ function App() {
     if (!task) {
       setEmptyInput("Task is Empty");
     } else {
-      set(ref(db, "todoTask/"), {
+      set(push(ref(db, "todoTask/")), {
         taskName: task,
         
+      }).then(()=>{
+        alert("successful");
+        setTask("")
+      }).catch(()=>{
+        alert("Error");
       });
     }
   };
+   //data write End
+  // read data start
+   useEffect(() => {
+    let todoDataR=ref(db, "todoTask/");
+    onValue(todoDataR,(snapshot)=>{
+      let arr=[];
+      // console.log(snapshot);
+      snapshot.forEach((item)=>{
+        // console.log(item.key);
+        
+        arr.push({...item.val(),id:item.key})
+        // console.log(item.val());
+        
+      })
+      setTaskView(arr);
+    });
+  },[]);
+  // read data end
+ 
 
   return (
     <>
@@ -27,6 +53,7 @@ function App() {
           <div className="w-full sm:w-[90%] md:w-[700px] rounded-3xl mx-auto">
             <input
               type="text"
+              value={task}
               onChange={handleInput}
               placeholder="Enter a Task"
               className="py-[12px] px-5 w-full outline-0 rounded-3xl border-2 border-amber-500 text-amber-700 text-sm sm:text-base"
@@ -59,9 +86,10 @@ function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="bg-sky-100 text-gray-800 transition hover:bg-sky-50">
-                    <td className="py-3 px-4 sm:px-6 text-sm sm:text-base">
-                      John Doe
+                 {taskView.map((item)=>(
+                   <tr className="bg-sky-100 text-gray-800 transition hover:bg-sky-50">
+                    <td className="py-3 px-4 sm:px-6 text-sm sm:text-base ">
+                      {item.taskName}
                     </td>
                     <td className="py-3 px-4 sm:px-6 flex justify-center gap-2 sm:gap-3">
                       <button className="bg-green-400 text-white font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:bg-green-500 transition text-sm sm:text-base">
@@ -72,6 +100,7 @@ function App() {
                       </button>
                     </td>
                   </tr>
+                 ))}
                 </tbody>
               </table>
             </div>
