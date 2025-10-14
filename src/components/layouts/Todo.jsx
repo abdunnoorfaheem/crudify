@@ -1,9 +1,10 @@
 import React from 'react';
 import { useState,useEffect } from "react";
 import { getDatabase, ref, set,push,onValue,remove  } from "firebase/database";
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const Todo = () => {
+  let navigate=useNavigate();
      let [task, setTask] = useState("");
         let [emptyInput, setEmptyInput] = useState("");
         let [taskView,setTaskView]=useState([]);
@@ -59,6 +60,11 @@ const Todo = () => {
       
       }
         // all delete end
+        // data send
+        let handleEdit=(id)=>{
+          navigate(`/edit/${id}`)
+        }
+        // data send
   return (
     <>
       <div className="bg-amber-50 py-[60px] min-h-screen">
@@ -105,10 +111,10 @@ const Todo = () => {
                             {item.taskName}
                           </td>
                           <td className="py-3 px-4 sm:px-6 flex justify-center gap-2 sm:gap-3">
-                           <Link to={"/edit"}>
-                            <button className="bg-green-400 text-white font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:bg-green-500 transition text-sm sm:text-base">
+                           
+                            <button className="bg-green-400 text-white font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:bg-green-500 transition text-sm sm:text-base" onClick={()=> handleEdit(item.id)}>
                               Edit
-                            </button></Link>
+                            </button>
                             <button className="bg-red-500 text-white font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded hover:bg-red-600 transition text-sm sm:text-base" onClick={()=>{handleDelete(item.id)}}>
                               Delete
                             </button>
