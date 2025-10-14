@@ -24,7 +24,7 @@ const Edit = () => {
   
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FFFBEA] px-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-md overflow-hidden border border-amber-200">
+      <div className="w-full md:w-[40%]  bg-white rounded-xl shadow-md overflow-hidden border border-amber-200">
        
         <div className="bg-amber-300 text-black font-semibold text-lg text-center py-3">
           Edit Task
@@ -44,7 +44,7 @@ const Edit = () => {
               Update
             </button>
             <Link to={"/todo"}>
-            <button className="flex-1 bg-red-500 text-white py-2 rounded-lg font-medium hover:bg-red-600 transition-all px-16">
+            <button className="flex-1 bg-red-500 text-white py-2 rounded-lg font-medium hover:bg-red-600 transition-all md:px-32 px-12">
               Cancel
             </button></Link>
           </div>
